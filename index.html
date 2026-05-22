@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SURI DRINKS — Premium Beverage Experience</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream:   '#FDF6EC',
+            caramel: '#C97D3A',
+            mocha:   '#6B3F1F',
+            blush:   '#F2C4A0',
+            sage:    '#A8B89A',
+            espresso:'#2C1A0E',
+          },
+          fontFamily: {
+            display: ['"Playfair Display"', 'serif'],
+            body:    ['"DM Sans"', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+
+  <style>
+    /* ── Base ── */
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: #FDF6EC; color: #2C1A0E; }
+
+    /* ── Noise overlay ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9999; opacity: .4;
+    }
+
+    /* ── Custom scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #FDF6EC; }
+    ::-webkit-scrollbar-thumb { background: #C97D3A; border-radius: 99px; }
+
+    /* ── Navbar ── */
+    #navbar { transition: all .4s ease; }
+    #navbar.scrolled { background: rgba(253,246,236,.95); backdrop-filter: blur(12px); box-shadow: 0 2px 24px rgba(44,26,14,.08); }
+
+    /* ── Hero blob ── */
+    .blob {
+      border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+      animation: blobAnim 8s ease-in-out infinite;
+    }
+    @keyframes blobAnim {
+      0%,100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+      50%      { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+    }
+
+    /* ── Fade-in on scroll ── */
+    .reveal { opacity: 0; transform: translateY(32px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── Product card ── */
+    .drink-card { transition: transform .35s ease, box-shadow .35s ease; }
+    .drink-card:hover { transform: translateY(-8px); box-shadow: 0 24px 48px rgba(201,125,58,.2); }
+    .drink-card:hover .drink-img { transform: scale(1.06); }
+    .drink-img { transition: transform .5s ease; }
+
+    /* ── Gallery ── */
+    .gal-item { overflow: hidden; }
+    .gal-item img { transition: transform .5s ease; }
+    .gal-item:hover img { transform: scale(1.08); }
+
+    /* ── Countdown ── */
+    .countdown-box { min-width: 72px; }
+
+    /* ── Star rating ── */
+    .stars { color: #C97D3A; letter-spacing: .1em; }
+
+    /* ── WhatsApp pulse ── */
+    .wa-btn { animation: waPulse 2.5s ease-in-out infinite; }
+    @keyframes waPulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(37,211,102,.5); }
+      50%      { box-shadow: 0 0 0 14px rgba(37,211,102,0); }
+    }
+
+    /* ── Mobile menu ── */
+    #mobile-menu { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
+    #mobile-menu.open { max-height: 400px; }
+
+    /* ── Marquee ── */
+    .marquee-track { display: flex; gap: 3rem; animation: marqueeAnim 18s linear infinite; white-space: nowrap; }
+    @keyframes marqueeAnim { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     NAVBAR
+══════════════════════════════════════════ -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 py-4 px-6 md:px-12">
+  <div class="max-w-7xl mx-auto flex items-center justify-between">
+
+    <!-- Logo -->
+    <a href="#home" class="flex items-center gap-2 group">
+      <div class="w-9 h-9 rounded-full bg-caramel flex items-center justify-center group-hover:scale-110 transition-transform">
+        <span class="text-cream text-lg font-display font-bold leading-none">S</span>
+      </div>
+      <span class="font-display font-bold text-xl text-espresso tracking-tight">SURI <span class="text-caramel">DRINKS</span></span>
+    </a>
+
+    <!-- Desktop nav -->
+    <ul class="hidden md:flex items-center gap-8 text-sm font-medium text-espresso/80">
+      <li><a href="#home"       class="hover:text-caramel transition-colors">Home</a></li>
+      <li><a href="#about"      class="hover:text-caramel transition-colors">About</a></li>
+      <li><a href="#menu"       class="hover:text-caramel transition-colors">Menu</a></li>
+      <li><a href="#promo"      class="hover:text-caramel transition-colors">Promo</a></li>
+      <li><a href="#testimoni"  class="hover:text-caramel transition-colors">Testimoni</a></li>
+      <li><a href="#contact"    class="hover:text-caramel transition-colors">Contact</a></li>
+    </ul>
+
+    <!-- CTA -->
+    <a href="https://wa.me/6281234567890?text=Halo!%20Saya%20mau%20order%20minuman%20dari%20SURI%20DRINKS%20😊"
+       target="_blank"
+       class="hidden md:inline-flex items-center gap-2 bg-caramel text-cream text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-mocha transition-colors">
+      Order Now
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+
+    <!-- Hamburger -->
+    <button id="hamburger" class="md:hidden flex flex-col gap-1.5 p-1" aria-label="Menu">
+      <span class="ham-line block w-6 h-0.5 bg-espresso transition-all duration-300"></span>
+      <span class="ham-line block w-6 h-0.5 bg-espresso transition-all duration-300"></span>
+      <span class="ham-line block w-6 h-0.5 bg-espresso transition-all duration-300"></span>
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="md:hidden bg-cream/95 backdrop-blur-lg rounded-2xl mt-3 overflow-hidden">
+    <ul class="flex flex-col gap-1 p-4 text-espresso font-medium">
+      <li><a href="#home"      class="block py-2 px-3 rounded-xl hover:bg-blush/40 transition-colors">Home</a></li>
+      <li><a href="#about"     class="block py-2 px-3 rounded-xl hover:bg-blush/40 transition-colors">About</a></li>
+      <li><a href="#menu"      class="block py-2 px-3 rounded-xl hover:bg-blush/40 transition-colors">Menu</a></li>
+      <li><a href="#promo"     class="block py-2 px-3 rounded-xl hover:bg-blush/40 transition-colors">Promo</a></li>
+      <li><a href="#testimoni" class="block py-2 px-3 rounded-xl hover:bg-blush/40 transition-colors">Testimoni</a></li>
+      <li><a href="#contact"   class="block py-2 px-3 rounded-xl hover:bg-blush/40 transition-colors">Contact</a></li>
+      <li class="pt-2">
+        <a href="https://wa.me/6281234567890" target="_blank"
+           class="block bg-caramel text-cream text-center py-2.5 rounded-xl font-semibold hover:bg-mocha transition-colors">
+          Order Now
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+
+<!-- ══════════════════════════════════════════
+     HERO SECTION
+══════════════════════════════════════════ -->
+<section id="home" class="relative min-h-screen flex items-center overflow-hidden pt-24 pb-16">
+
+  <!-- Background gradient -->
+  <div class="absolute inset-0 bg-gradient-to-br from-cream via-blush/30 to-caramel/10 -z-10"></div>
+
+  <!-- Decorative blobs -->
+  <div class="blob absolute -top-20 -right-20 w-96 h-96 bg-caramel/10 -z-10"></div>
+  <div class="blob absolute bottom-0 -left-16 w-72 h-72 bg-blush/30 -z-10" style="animation-delay:3s"></div>
+
+  <!-- Floating ring -->
+  <div class="absolute top-32 right-1/4 w-48 h-48 rounded-full border border-caramel/20 -z-10 animate-spin" style="animation-duration:20s"></div>
+
+  <div class="max-w-7xl mx-auto px-6 md:px-12 grid md:grid-cols-2 gap-12 items-center w-full">
+
+    <!-- Text -->
+    <div>
+      <span class="inline-block bg-caramel/10 text-caramel text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-6">
+        ✦ Premium Beverages
+      </span>
+      <h1 class="font-display font-black text-5xl md:text-6xl lg:text-7xl leading-none text-espresso mb-6">
+        Fresh Drinks<br/>
+        <em class="text-caramel not-italic">for Your</em><br/>
+        Perfect Day
+      </h1>
+      <p class="text-espresso/60 text-lg max-w-md mb-10 leading-relaxed">
+        Setiap tegukan adalah pengalaman. Dibuat dari bahan pilihan segar, diolah dengan cinta, siap menemani hari-harimu.
+      </p>
+      <div class="flex flex-wrap gap-4">
+        <a href="https://wa.me/6281234567890?text=Halo!%20Saya%20mau%20order%20dari%20SURI%20DRINKS" target="_blank"
+           class="inline-flex items-center gap-2 bg-caramel text-cream font-semibold px-7 py-3.5 rounded-full hover:bg-mocha transition-all hover:scale-105 shadow-lg shadow-caramel/30">
+          Order Sekarang
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#menu"
+           class="inline-flex items-center gap-2 border-2 border-espresso/20 text-espresso font-semibold px-7 py-3.5 rounded-full hover:border-caramel hover:text-caramel transition-all">
+          Lihat Menu
+        </a>
+      </div>
+
+      <!-- Stats -->
+      <div class="flex gap-8 mt-12">
+        <div>
+          <p class="font-display font-bold text-3xl text-caramel">2K+</p>
+          <p class="text-espresso/50 text-sm">Happy Customers</p>
+        </div>
+        <div class="w-px bg-espresso/10"></div>
+        <div>
+          <p class="font-display font-bold text-3xl text-caramel">25+</p>
+          <p class="text-espresso/50 text-sm">Menu Pilihan</p>
+        </div>
+        <div class="w-px bg-espresso/10"></div>
+        <div>
+          <p class="font-display font-bold text-3xl text-caramel">4.9</p>
+          <p class="text-espresso/50 text-sm">⭐ Rating</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero visual -->
+    <div class="relative flex items-center justify-center">
+      <!-- Main circle bg -->
+      <div class="w-72 h-72 md:w-96 md:h-96 rounded-full bg-gradient-to-br from-caramel/20 to-blush/40 flex items-center justify-center relative">
+
+        <!-- Hero drink image (emoji placeholder — replace with real <img>) -->
+        <div class="text-[180px] md:text-[220px] leading-none select-none drop-shadow-2xl" style="filter:drop-shadow(0 24px 48px rgba(201,125,58,.3))">
+          ☕
+        </div>
+
+        <!-- Floating badges -->
+        <div class="absolute -top-4 -left-4 bg-cream rounded-2xl px-4 py-2 shadow-lg flex items-center gap-2 border border-blush">
+          <span class="text-xl">🧋</span>
+          <div>
+            <p class="text-xs font-semibold text-espresso">Best Seller</p>
+            <p class="text-xs text-caramel">Brown Sugar Boba</p>
+          </div>
+        </div>
+
+        <div class="absolute -bottom-4 -right-2 bg-caramel rounded-2xl px-4 py-2 shadow-lg">
+          <p class="text-cream text-xs font-semibold">Free Delivery</p>
+          <p class="text-cream/70 text-xs">Min. order 2 cup</p>
+        </div>
+
+        <div class="absolute top-8 -right-8 bg-cream rounded-full w-14 h-14 flex items-center justify-center shadow-lg border border-blush text-2xl">
+          🍋
+        </div>
+        <div class="absolute bottom-8 -left-10 bg-cream rounded-full w-12 h-12 flex items-center justify-center shadow-lg border border-blush text-xl">
+          🍵
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Marquee strip -->
+  <div class="absolute bottom-0 left-0 right-0 bg-caramel py-3 overflow-hidden">
+    <div class="marquee-track text-cream/80 text-sm font-medium">
+      <span>☕ Brown Sugar Latte</span><span>•</span>
+      <span>🧋 Boba Taro</span><span>•</span>
+      <span>🍵 Matcha Latte</span><span>•</span>
+      <span>🥭 Mango Smoothie</span><span>•</span>
+      <span>🍋 Lemon Mojito</span><span>•</span>
+      <span>🍓 Strawberry Milk</span><span>•</span>
+      <span>☕ Caramel Coffee</span><span>•</span>
+      <span>🧃 Thai Tea</span><span>•</span>
+      <!-- duplicate for seamless loop -->
+      <span>☕ Brown Sugar Latte</span><span>•</span>
+      <span>🧋 Boba Taro</span><span>•</span>
+      <span>🍵 Matcha Latte</span><span>•</span>
+      <span>🥭 Mango Smoothie</span><span>•</span>
+      <span>🍋 Lemon Mojito</span><span>•</span>
+      <span>🍓 Strawberry Milk</span><span>•</span>
+      <span>☕ Caramel Coffee</span><span>•</span>
+      <span>🧃 Thai Tea</span><span>•</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     ABOUT SECTION
+══════════════════════════════════════════ -->
+<section id="about" class="py-24 px-6 md:px-12 bg-espresso text-cream relative overflow-hidden">
+
+  <!-- Decorative circle -->
+  <div class="absolute -top-24 -right-24 w-80 h-80 rounded-full border border-cream/5"></div>
+  <div class="absolute -bottom-16 -left-16 w-56 h-56 rounded-full border border-cream/5"></div>
+
+  <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+
+    <!-- Left: image + facts card -->
+    <div class="relative reveal">
+      <!-- Placeholder image card -->
+      <div class="w-full aspect-[4/5] rounded-3xl bg-gradient-to-br from-caramel/30 to-mocha flex items-center justify-center text-[120px] shadow-2xl border border-cream/5">
+        🫖
+      </div>
+      <!-- Floating fact card -->
+      <div class="absolute -bottom-6 -right-6 bg-caramel rounded-2xl p-5 shadow-xl max-w-[180px]">
+        <p class="text-cream/70 text-xs mb-1">Berdiri sejak</p>
+        <p class="font-display font-bold text-3xl text-cream">2019</p>
+        <p class="text-cream/70 text-xs mt-1">Melayani ribuan pelanggan</p>
+      </div>
+    </div>
+
+    <!-- Right: story + benefits -->
+    <div class="reveal" style="transition-delay:.15s">
+      <span class="inline-block bg-cream/10 text-caramel text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-6">
+        ✦ Our Story
+      </span>
+      <h2 class="font-display font-black text-4xl md:text-5xl leading-tight mb-6">
+        Dibuat dari <em class="text-caramel">Hati,</em><br/>Dinikmati dengan <em class="text-caramel">Senyum</em>
+      </h2>
+      <p class="text-cream/60 leading-relaxed mb-4">
+        SURI DRINKS lahir dari kecintaan mendalam terhadap minuman berkualitas tinggi. Kami percaya bahwa setiap tegukan seharusnya memberikan kebahagiaan — bukan sekadar melepas dahaga.
+      </p>
+      <p class="text-cream/60 leading-relaxed mb-10">
+        Setiap menu kami dirancang dengan teliti, menggunakan bahan segar pilihan tanpa pengawet, diolah secara higienis oleh barista terlatih kami.
+      </p>
+
+      <!-- Benefits grid -->
+      <div class="grid grid-cols-2 gap-4">
+        <div class="bg-cream/5 rounded-2xl p-4 border border-cream/10 hover:border-caramel/40 transition-colors">
+          <div class="text-2xl mb-2">🌿</div>
+          <p class="font-semibold text-sm">Fresh Ingredients</p>
+          <p class="text-cream/50 text-xs mt-1">Bahan segar setiap hari</p>
+        </div>
+        <div class="bg-cream/5 rounded-2xl p-4 border border-cream/10 hover:border-caramel/40 transition-colors">
+          <div class="text-2xl mb-2">⭐</div>
+          <p class="font-semibold text-sm">Premium Quality</p>
+          <p class="text-cream/50 text-xs mt-1">Standar kafe internasional</p>
+        </div>
+        <div class="bg-cream/5 rounded-2xl p-4 border border-cream/10 hover:border-caramel/40 transition-colors">
+          <div class="text-2xl mb-2">⚡</div>
+          <p class="font-semibold text-sm">Fast Delivery</p>
+          <p class="text-cream/50 text-xs mt-1">Tiba dalam 30 menit</p>
+        </div>
+        <div class="bg-cream/5 rounded-2xl p-4 border border-cream/10 hover:border-caramel/40 transition-colors">
+          <div class="text-2xl mb-2">💰</div>
+          <p class="font-semibold text-sm">Affordable Price</p>
+          <p class="text-cream/50 text-xs mt-1">Harga bersahabat</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     BEST SELLER MENU
+══════════════════════════════════════════ -->
+<section id="menu" class="py-24 px-6 md:px-12 bg-cream">
+  <div class="max-w-7xl mx-auto">
+
+    <!-- Header -->
+    <div class="text-center mb-16 reveal">
+      <span class="inline-block bg-caramel/10 text-caramel text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-4">
+        ✦ Our Menu
+      </span>
+      <h2 class="font-display font-black text-4xl md:text-5xl text-espresso">Menu <em class="text-caramel">Favorit</em> Kami</h2>
+      <p class="text-espresso/50 mt-3 max-w-md mx-auto">Dari kopi premium hingga boba segar — temukan minuman sempurna untukmu</p>
+    </div>
+
+    <!-- Filter tabs -->
+    <div class="flex flex-wrap justify-center gap-3 mb-12 reveal">
+      <button class="filter-btn active-filter px-5 py-2 rounded-full text-sm font-semibold transition-all" data-filter="all">Semua</button>
+      <button class="filter-btn px-5 py-2 rounded-full text-sm font-semibold transition-all" data-filter="coffee">Coffee</button>
+      <button class="filter-btn px-5 py-2 rounded-full text-sm font-semibold transition-all" data-filter="boba">Boba</button>
+      <button class="filter-btn px-5 py-2 rounded-full text-sm font-semibold transition-all" data-filter="fresh">Fresh Drinks</button>
+    </div>
+
+    <!-- Product grid -->
+    <div id="menu-grid" class="grid grid-cols-2 md:grid-cols-3 gap-5 md:gap-7">
+
+      <!-- Card template: copy & tweak for each product -->
+      <!-- 1 Brown Sugar Boba -->
+      <div class="drink-card bg-white rounded-3xl overflow-hidden shadow-sm border border-espresso/5 reveal" data-category="boba">
+        <div class="bg-gradient-to-br from-amber-100 to-orange-100 h-40 flex items-center justify-center text-7xl relative overflow-hidden">
+          🧋
+          <span class="absolute top-3 left-3 bg-caramel text-cream text-xs font-bold px-2.5 py-1 rounded-full">Best Seller</span>
+        </div>
+        <div class="p-5">
+          <h3 class="font-display font-bold text-lg text-espresso">Brown Sugar Boba</h3>
+          <p class="text-espresso/50 text-xs mt-1 mb-3">Boba premium dengan gula aren asli dan susu segar</p>
+          <div class="flex items-center justify-between">
+            <p class="font-bold text-caramel text-lg">Rp 22.000</p>
+            <a href="https://wa.me/6281234567890?text=Halo!%20Saya%20mau%20order%20Brown%20Sugar%20Boba%20dari%20SURI%20DRINKS" target="_blank"
+               class="bg-caramel text-cream text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-mocha transition-colors">
+              Order
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2 Matcha Latte -->
+      <div class="drink-card bg-white rounded-3xl overflow-hidden shadow-sm border border-espresso/5 reveal" data-category="coffee" style="transition-delay:.05s">
+        <div class="bg-gradient-to-br from-green-100 to-emerald-100 h-40 flex items-center justify-center text-7xl relative overflow-hidden">
+          🍵
+          <span class="absolute top-3 left-3 bg-sage text-white text-xs font-bold px-2.5 py-1 rounded-full">New</span>
+        </div>
+        <div class="p-5">
+          <h3 class="font-display font-bold text-lg text-espresso">Matcha Latte</h3>
+          <p class="text-espresso/50 text-xs mt-1 mb-3">Matcha Jepang grade-A dengan oat milk lembut</p>
+          <div class="flex items-center justify-between">
+            <p class="font-bold text-caramel text-lg">Rp 25.000</p>
+            <a href="https://wa.me/6281234567890?text=Saya%20mau%20order%20Matcha%20Latte%20dari%20SURI%20DRINKS" target="_blank"
+               class="bg-caramel text-cream text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-mocha transition-colors">
+              Order
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 Thai Tea -->
+      <div class="drink-card bg-white rounded-3xl overflow-hidden shadow-sm border border-espresso/5 reveal" data-category="fresh" style="transition-delay:.1s">
+        <div class="bg-gradient-to-br from-orange-100 to-amber-100 h-40 flex items-center justify-center text-7xl relative overflow-hidden">
+          🧃
+          <span class="absolute top-3 left-3 bg-orange-400 text-white text-xs font-bold px-2.5 py-1 rounded-full">Promo</span>
+        </div>
+        <div class="p-5">
+          <h3 class="font-display font-bold text-lg text-espresso">Thai Tea</h3>
+          <p class="text-espresso/50 text-xs mt-1 mb-3">Teh Thailand otentik dengan krimer kental manis</p>
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="font-bold text-caramel text-lg">Rp 18.000</p>
+              <p class="text-espresso/40 text-xs line-through">Rp 22.000</p>
+            </div>
+            <a href="https://wa.me/6281234567890?text=Saya%20mau%20order%20Thai%20Tea%20dari%20SURI%20DRINKS" target="_blank"
+               class="bg-caramel text-cream text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-mocha transition-colors">
+              Order
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 Mango Smoothie -->
+      <div class="drink-card bg-white rounded-3xl overflow-hidden shadow-sm border border-espresso/5 reveal" data-category="fresh" style="transition-delay:.15s">
+        <div class="bg-gradient-to-br from-yellow-100 to-orange-100 h-40 flex items-center justify-center text-7xl relative overflow-hidden">
+          🥭
+        </div>
+        <div class="p-5">
+          <h3 class="font-display font-bold text-lg text-espresso">Mango Smoothie</h3>
+          <p class="text-espresso/50 text-xs mt-1 mb-3">Mangga harum blended dengan yogurt segar</p>
+          <div class="flex items-center justify-between">
+            <p class="font-bold text-caramel text-lg">Rp 20.000</p>
+            <a href="https://wa.me/6281234567890?text=Saya%20mau%20order%20Mango%20Smoothie%20dari%20SURI%20DRINKS" target="_blank"
+               class="bg-caramel text-cream text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-mocha transition-colors">
+              Order
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 Caramel Coffee -->
+      <div class="drink-card bg-white rounded-3xl overflow-hidden shadow-sm border border-espresso/5 reveal" data-category="coffee" style="transition-delay:.2s">
+        <div class="bg-gradient-to-br from-amber-100 to-yellow-50 h-40 flex items-center justify-center text-7xl relative overflow-hidden">
+          ☕
+          <span class="absolute top-3 left-3 bg-caramel text-cream text-xs font-bold px-2.5 py-1 rounded-full">Best Seller</span>
+        </div>
+        <div class="p-5">
+          <h3 class="font-display font-bold text-lg text-espresso">Caramel Coffee</h3>
+          <p class="text-espresso/50 text-xs mt-1 mb-3">Espresso double shot dengan saus karamel homemade</p>
+          <div class="flex items-center justify-between">
+            <p class="font-bold text-caramel text-lg">Rp 28.000</p>
+            <a href="https://wa.me/6281234567890?text=Saya%20mau%20order%20Caramel%20Coffee%20dari%20SURI%20DRINKS" target="_blank"
+               class="bg-caramel text-cream text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-mocha transition-colors">
+              Order
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 Lemon Mojito -->
+      <div class="drink-card bg-white rounded-3xl overflow-hidden shadow-sm border border-espresso/5 reveal" data-category="fresh" style="transition-delay:.25s">
+        <div class="bg-gradient-to-br from-lime-100 to-green-50 h-40 flex items-center justify-center text-7xl relative overflow-hidden">
+          🍋
+          <span class="absolute top-3 left-3 bg-lime-500 text-white text-xs font-bold px-2.5 py-1 rounded-full">New</span>
+        </div>
+        <div class="p-5">
+          <h3 class="font-display font-bold text-lg text-espresso">Lemon Mojito</h3>
+          <p class="text-espresso/50 text-xs mt-1 mb-3">Lemon segar dengan mint dan soda sparkling</p>
+          <div class="flex items-center justify-between">
+            <p class="font-bold text-caramel text-lg">Rp 19.000</p>
+            <a href="https://wa.me/6281234567890?text=Saya%20mau%20order%20Lemon%20Mojito%20dari%20SURI%20DRINKS" target="_blank"
+               class="bg-caramel text-cream text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-mocha transition-colors">
+              Order
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end grid -->
+
+    <div class="text-center mt-12 reveal">
+      <a href="https://wa.me/6281234567890?text=Halo!%20Boleh%20minta%20full%20menu%20SURI%20DRINKS%3F" target="_blank"
+         class="inline-flex items-center gap-2 border-2 border-caramel text-caramel font-semibold px-8 py-3 rounded-full hover:bg-caramel hover:text-cream transition-all">
+        Lihat Semua Menu
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     PROMO SECTION
+══════════════════════════════════════════ -->
+<section id="promo" class="py-24 px-6 md:px-12 bg-gradient-to-br from-caramel to-mocha relative overflow-hidden">
+
+  <!-- Decorative -->
+  <div class="absolute top-0 left-0 right-0 h-px bg-cream/10"></div>
+  <div class="absolute -top-32 -right-32 w-96 h-96 rounded-full border border-cream/10"></div>
+  <div class="absolute -bottom-20 -left-20 w-64 h-64 rounded-full border border-cream/10"></div>
+
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-14 reveal">
+      <span class="inline-block bg-cream/15 text-cream text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-4">
+        ✦ Limited Time
+      </span>
+      <h2 class="font-display font-black text-4xl md:text-5xl text-cream">Promo Spesial <em>Hari Ini</em></h2>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+
+      <!-- Promo card 1 -->
+      <div class="reveal bg-cream/10 backdrop-blur-sm border border-cream/20 rounded-3xl p-7 hover:bg-cream/15 transition-colors">
+        <div class="text-5xl mb-4">🎁</div>
+        <h3 class="font-display font-bold text-2xl text-cream mb-2">Buy 1 Get 1</h3>
+        <p class="text-cream/70 text-sm mb-6">Beli 1 minuman apapun, gratis 1 minuman pilihan untuk teman kamu! Berlaku setiap Senin–Rabu.</p>
+        <div class="bg-cream/20 rounded-xl px-4 py-2 inline-block">
+          <p class="text-cream text-xs font-semibold tracking-widest">Kode: BUYONE</p>
+        </div>
+      </div>
+
+      <!-- Promo card 2 — hero promo with countdown -->
+      <div class="reveal bg-cream rounded-3xl p-7 relative overflow-hidden md:-mt-4 md:-mb-4 shadow-2xl" style="transition-delay:.1s">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-caramel/10 rounded-bl-full"></div>
+        <span class="bg-caramel text-cream text-xs font-bold px-3 py-1 rounded-full">🔥 Terpopuler</span>
+        <div class="text-5xl mt-4 mb-4">☕</div>
+        <h3 class="font-display font-bold text-2xl text-espresso mb-2">Diskon 20%</h3>
+        <p class="text-espresso/60 text-sm mb-5">Diskon 20% untuk semua menu coffee setiap hari Jumat! Gunakan kode di bawah saat order via WA.</p>
+
+        <!-- Countdown -->
+        <p class="text-xs text-espresso/50 mb-2">Berakhir dalam:</p>
+        <div class="flex gap-2 mb-6">
+          <div class="countdown-box bg-espresso text-cream rounded-xl py-2 text-center">
+            <p id="cd-h" class="font-display font-bold text-xl leading-tight">00</p>
+            <p class="text-xs text-cream/50">Jam</p>
+          </div>
+          <div class="countdown-box bg-espresso text-cream rounded-xl py-2 text-center">
+            <p id="cd-m" class="font-display font-bold text-xl leading-tight">00</p>
+            <p class="text-xs text-cream/50">Menit</p>
+          </div>
+          <div class="countdown-box bg-espresso text-cream rounded-xl py-2 text-center">
+            <p id="cd-s" class="font-display font-bold text-xl leading-tight">00</p>
+            <p class="text-xs text-cream/50">Detik</p>
+          </div>
+        </div>
+
+        <div class="bg-caramel/10 rounded-xl px-4 py-2 inline-block mb-4">
+          <p class="text-caramel text-xs font-semibold tracking-widest">Kode: FRIDAY20</p>
+        </div>
+        <a href="https://wa.me/6281234567890?text=Halo!%20Saya%20mau%20pakai%20promo%20FRIDAY20%20dong" target="_blank"
+           class="block text-center bg-caramel text-cream font-semibold py-3 rounded-xl hover:bg-mocha transition-colors">
+          Klaim Promo →
+        </a>
+      </div>
+
+      <!-- Promo card 3 -->
+      <div class="reveal bg-cream/10 backdrop-blur-sm border border-cream/20 rounded-3xl p-7 hover:bg-cream/15 transition-colors" style="transition-delay:.2s">
+        <div class="text-5xl mb-4">🚚</div>
+        <h3 class="font-display font-bold text-2xl text-cream mb-2">Free Delivery</h3>
+        <p class="text-cream/70 text-sm mb-6">Gratis ongkir untuk order minimum 2 cup, radius max 5 km dari toko kami. Pesan via WhatsApp sekarang!</p>
+        <div class="bg-cream/20 rounded-xl px-4 py-2 inline-block">
+          <p class="text-cream text-xs font-semibold tracking-widest">Min. 2 cup • Radius 5km</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     WHY CHOOSE US
+══════════════════════════════════════════ -->
+<section id="why" class="py-24 px-6 md:px-12 bg-cream">
+  <div class="max-w-7xl mx-auto">
+
+    <div class="text-center mb-16 reveal">
+      <span class="inline-block bg-caramel/10 text-caramel text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-4">
+        ✦ Keunggulan Kami
+      </span>
+      <h2 class="font-display font-black text-4xl md:text-5xl text-espresso">Kenapa Pilih <em class="text-caramel">SURI?</em></h2>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-5">
+      <div class="reveal col-span-1 bg-espresso rounded-3xl p-6 text-cream flex flex-col items-center text-center hover:scale-105 transition-transform">
+        <div class="text-4xl mb-3">🌿</div>
+        <p class="font-semibold text-sm">Fresh Everyday</p>
+        <p class="text-cream/50 text-xs mt-2">Bahan baru setiap pagi</p>
+      </div>
+      <div class="reveal col-span-1 bg-caramel rounded-3xl p-6 text-cream flex flex-col items-center text-center hover:scale-105 transition-transform" style="transition-delay:.05s">
+        <div class="text-4xl mb-3">⚡</div>
+        <p class="font-semibold text-sm">Fast Delivery</p>
+        <p class="text-cream/70 text-xs mt-2">30 menit sampai</p>
+      </div>
+      <div class="reveal col-span-1 bg-blush rounded-3xl p-6 text-espresso flex flex-col items-center text-center hover:scale-105 transition-transform" style="transition-delay:.1s">
+        <div class="text-4xl mb-3">⭐</div>
+        <p class="font-semibold text-sm">Premium</p>
+        <p class="text-espresso/60 text-xs mt-2">Bahan terpilih terbaik</p>
+      </div>
+      <div class="reveal col-span-1 bg-sage rounded-3xl p-6 text-white flex flex-col items-center text-center hover:scale-105 transition-transform" style="transition-delay:.15s">
+        <div class="text-4xl mb-3">🧼</div>
+        <p class="font-semibold text-sm">Hygienic</p>
+        <p class="text-white/70 text-xs mt-2">Proses bersih terjamin</p>
+      </div>
+      <div class="reveal col-span-2 md:col-span-1 bg-mocha rounded-3xl p-6 text-cream flex flex-col items-center text-center hover:scale-105 transition-transform" style="transition-delay:.2s">
+        <div class="text-4xl mb-3">💰</div>
+        <p class="font-semibold text-sm">Affordable</p>
+        <p class="text-cream/60 text-xs mt-2">Harga ramah di kantong</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     TESTIMONIAL
+══════════════════════════════════════════ -->
+<section id="testimoni" class="py-24 px-6 md:px-12 bg-espresso">
+  <div class="max-w-7xl mx-auto">
+
+    <div class="text-center mb-16 reveal">
+      <span class="inline-block bg-cream/10 text-caramel text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-4">
+        ✦ Testimoni
+      </span>
+      <h2 class="font-display font-black text-4xl md:text-5xl text-cream">Kata Mereka <em class="text-caramel">tentang Kami</em></h2>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+
+      <!-- Testimonial 1 -->
+      <div class="reveal bg-cream/5 border border-cream/10 rounded-3xl p-7 hover:border-caramel/30 transition-colors">
+        <div class="stars text-lg mb-4">★★★★★</div>
+        <p class="text-cream/80 text-sm leading-relaxed mb-6">
+          "Brown Sugar Bobanya juara! Udah jadi langganan tiap minggu. Rasa konsisten, packaging bagus, dan pengiriman cepat banget. Recommended!"
+        </p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-caramel/30 flex items-center justify-center text-xl">👩</div>
+          <div>
+            <p class="text-cream font-semibold text-sm">Priscilla R.</p>
+            <p class="text-cream/40 text-xs">Jakarta Selatan</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonial 2 -->
+      <div class="reveal bg-caramel/20 border border-caramel/30 rounded-3xl p-7" style="transition-delay:.1s">
+        <div class="stars text-lg mb-4">★★★★★</div>
+        <p class="text-cream/90 text-sm leading-relaxed mb-6">
+          "Matcha Latte-nya bikin aku move on dari kafe lain 😂 Rasa matchanya genuine, nggak terlalu manis, pas banget. 10/10 worth it!"
+        </p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-caramel/30 flex items-center justify-center text-xl">👨</div>
+          <div>
+            <p class="text-cream font-semibold text-sm">Bagas F.</p>
+            <p class="text-cream/60 text-xs">Depok</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonial 3 -->
+      <div class="reveal bg-cream/5 border border-cream/10 rounded-3xl p-7 hover:border-caramel/30 transition-colors" style="transition-delay:.2s">
+        <div class="stars text-lg mb-4">★★★★★</div>
+        <p class="text-cream/80 text-sm leading-relaxed mb-6">
+          "Lemon Mojito-nya refreshing abis! Perfect untuk cuaca panas. Harganya juga affordable banget untuk kualitas segini. Sudah order 5x lebih!"
+        </p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-caramel/30 flex items-center justify-center text-xl">👩</div>
+          <div>
+            <p class="text-cream font-semibold text-sm">Tania M.</p>
+            <p class="text-cream/40 text-xs">Bekasi</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rating summary -->
+    <div class="mt-12 bg-cream/5 border border-cream/10 rounded-3xl p-8 flex flex-col md:flex-row items-center gap-8 reveal">
+      <div class="text-center">
+        <p class="font-display font-black text-7xl text-caramel">4.9</p>
+        <div class="stars text-2xl my-2">★★★★★</div>
+        <p class="text-cream/50 text-sm">Rating rata-rata</p>
+      </div>
+      <div class="w-px h-20 bg-cream/10 hidden md:block"></div>
+      <div class="flex-1 space-y-3">
+        <div class="flex items-center gap-3">
+          <p class="text-cream/60 text-xs w-12">5 ★</p>
+          <div class="flex-1 h-2 bg-cream/10 rounded-full overflow-hidden"><div class="h-full bg-caramel rounded-full" style="width:92%"></div></div>
+          <p class="text-cream/60 text-xs w-8">92%</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <p class="text-cream/60 text-xs w-12">4 ★</p>
+          <div class="flex-1 h-2 bg-cream/10 rounded-full overflow-hidden"><div class="h-full bg-caramel/70 rounded-full" style="width:6%"></div></div>
+          <p class="text-cream/60 text-xs w-8">6%</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <p class="text-cream/60 text-xs w-12">≤3 ★</p>
+          <div class="flex-1 h-2 bg-cream/10 rounded-full overflow-hidden"><div class="h-full bg-caramel/40 rounded-full" style="width:2%"></div></div>
+          <p class="text-cream/60 text-xs w-8">2%</p>
+        </div>
+      </div>
+      <div class="text-center">
+        <p class="font-display font-bold text-3xl text-cream">2,100+</p>
+        <p class="text-cream/50 text-sm">Total ulasan</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     GALLERY
+══════════════════════════════════════════ -->
+<section id="gallery" class="py-24 px-6 md:px-12 bg-cream">
+  <div class="max-w-7xl mx-auto">
+
+    <div class="text-center mb-14 reveal">
+      <span class="inline-block bg-caramel/10 text-caramel text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-4">
+        ✦ Gallery
+      </span>
+      <h2 class="font-display font-black text-4xl md:text-5xl text-espresso">Lihat <em class="text-caramel">Keindahannya</em></h2>
+    </div>
+
+    <!-- Gallery grid -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 auto-rows-[180px] reveal">
+      <div class="gal-item rounded-2xl overflow-hidden row-span-2 bg-gradient-to-br from-amber-100 to-orange-200 flex items-center justify-center text-[100px]">☕</div>
+      <div class="gal-item rounded-2xl overflow-hidden bg-gradient-to-br from-green-100 to-emerald-200 flex items-center justify-center text-[80px]">🍵</div>
+      <div class="gal-item rounded-2xl overflow-hidden bg-gradient-to-br from-yellow-100 to-amber-100 flex items-center justify-center text-[80px]">🥭</div>
+      <div class="gal-item rounded-2xl overflow-hidden row-span-2 bg-gradient-to-br from-purple-100 to-pink-200 flex items-center justify-center text-[100px]">🧋</div>
+      <div class="gal-item rounded-2xl overflow-hidden bg-gradient-to-br from-orange-100 to-red-100 flex items-center justify-center text-[80px]">🧃</div>
+      <div class="gal-item rounded-2xl overflow-hidden col-span-1 bg-gradient-to-br from-lime-100 to-green-100 flex items-center justify-center text-[80px]">🍋</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     CONTACT / ORDER
+══════════════════════════════════════════ -->
+<section id="contact" class="py-24 px-6 md:px-12 bg-blush/30">
+  <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-start">
+
+    <!-- Info -->
+    <div class="reveal">
+      <span class="inline-block bg-caramel/10 text-caramel text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-6">
+        ✦ Hubungi Kami
+      </span>
+      <h2 class="font-display font-black text-4xl md:text-5xl text-espresso mb-8">Yuk, Order<br/><em class="text-caramel">Sekarang!</em></h2>
+
+      <div class="space-y-5">
+        <div class="flex items-start gap-4">
+          <div class="w-10 h-10 rounded-xl bg-caramel/10 flex items-center justify-center flex-shrink-0 text-xl">📍</div>
+          <div>
+            <p class="font-semibold text-espresso text-sm">Lokasi Toko</p>
+            <p class="text-espresso/60 text-sm">Jl. Rasa Segar No. 88, Kebayoran Baru<br/>Jakarta Selatan, 12180</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="w-10 h-10 rounded-xl bg-caramel/10 flex items-center justify-center flex-shrink-0 text-xl">🕐</div>
+          <div>
+            <p class="font-semibold text-espresso text-sm">Jam Operasional</p>
+            <p class="text-espresso/60 text-sm">Senin – Jumat: 07.00 – 21.00<br/>Sabtu – Minggu: 08.00 – 22.00</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="w-10 h-10 rounded-xl bg-caramel/10 flex items-center justify-center flex-shrink-0 text-xl">📱</div>
+          <div>
+            <p class="font-semibold text-espresso text-sm">WhatsApp Order</p>
+            <p class="text-espresso/60 text-sm">+62 812-3456-7890</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="w-10 h-10 rounded-xl bg-caramel/10 flex items-center justify-center flex-shrink-0 text-xl">✉️</div>
+          <div>
+            <p class="font-semibold text-espresso text-sm">Email</p>
+            <p class="text-espresso/60 text-sm">hello@suridrinks.id</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- WA Button -->
+      <a href="https://wa.me/6281234567890?text=Halo%20SURI%20DRINKS!%20Saya%20mau%20order%20minuman%20😊"
+         target="_blank"
+         class="wa-btn mt-10 inline-flex items-center gap-3 bg-green-500 text-white font-bold px-8 py-4 rounded-2xl hover:bg-green-600 transition-colors text-lg shadow-lg">
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Order via WhatsApp
+      </a>
+
+    </div>
+
+    <!-- Map placeholder + Form -->
+    <div class="reveal space-y-6" style="transition-delay:.15s">
+      <!-- Map placeholder -->
+      <div class="w-full h-64 bg-espresso/5 rounded-3xl border-2 border-dashed border-espresso/10 flex flex-col items-center justify-center text-espresso/30">
+        <div class="text-5xl mb-3">🗺️</div>
+        <p class="text-sm font-medium">Google Maps Embed</p>
+        <p class="text-xs">Ganti dengan iframe Google Maps</p>
+      </div>
+
+      <!-- Quick order form -->
+      <div class="bg-white rounded-3xl p-7 shadow-sm border border-espresso/5">
+        <h3 class="font-display font-bold text-xl text-espresso mb-5">Pesan Cepat</h3>
+        <div class="space-y-4">
+          <input type="text" placeholder="Nama Kamu" id="form-name"
+                 class="w-full border border-espresso/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-caramel transition-colors" />
+          <input type="text" placeholder="Nomor WhatsApp" id="form-phone"
+                 class="w-full border border-espresso/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-caramel transition-colors" />
+          <textarea placeholder="Menu yang ingin dipesan…" id="form-order" rows="3"
+                    class="w-full border border-espresso/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-caramel transition-colors resize-none"></textarea>
+          <button id="send-order"
+                  class="w-full bg-caramel text-cream font-semibold py-3 rounded-xl hover:bg-mocha transition-colors">
+            Kirim ke WhatsApp →
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════ -->
+<footer class="bg-espresso text-cream py-16 px-6 md:px-12">
+  <div class="max-w-7xl mx-auto">
+
+    <div class="grid md:grid-cols-4 gap-10 mb-12">
+
+      <!-- Brand -->
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-2 mb-4">
+          <div class="w-9 h-9 rounded-full bg-caramel flex items-center justify-center">
+            <span class="text-cream text-lg font-display font-bold">S</span>
+          </div>
+          <span class="font-display font-bold text-xl">SURI <span class="text-caramel">DRINKS</span></span>
+        </div>
+        <p class="text-cream/50 text-sm leading-relaxed max-w-xs">
+          Premium beverage brand yang menghadirkan pengalaman minum terbaik dengan bahan-bahan pilihan segar setiap harinya.
+        </p>
+        <!-- Social -->
+        <div class="flex gap-3 mt-6">
+          <a href="#" class="w-9 h-9 bg-cream/10 rounded-full flex items-center justify-center text-sm hover:bg-caramel transition-colors">📸</a>
+          <a href="#" class="w-9 h-9 bg-cream/10 rounded-full flex items-center justify-center text-sm hover:bg-caramel transition-colors">🐦</a>
+          <a href="#" class="w-9 h-9 bg-cream/10 rounded-full flex items-center justify-center text-sm hover:bg-caramel transition-colors">▶️</a>
+          <a href="https://wa.me/6281234567890" target="_blank" class="w-9 h-9 bg-green-600 rounded-full flex items-center justify-center text-sm hover:bg-green-500 transition-colors">💬</a>
+        </div>
+      </div>
+
+      <!-- Quick links -->
+      <div>
+        <p class="font-semibold text-sm mb-4 tracking-widest uppercase text-caramel">Menu</p>
+        <ul class="space-y-2 text-cream/50 text-sm">
+          <li><a href="#home"      class="hover:text-caramel transition-colors">Home</a></li>
+          <li><a href="#about"     class="hover:text-caramel transition-colors">About</a></li>
+          <li><a href="#menu"      class="hover:text-caramel transition-colors">Menu</a></li>
+          <li><a href="#promo"     class="hover:text-caramel transition-colors">Promo</a></li>
+          <li><a href="#testimoni" class="hover:text-caramel transition-colors">Testimoni</a></li>
+          <li><a href="#contact"   class="hover:text-caramel transition-colors">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div>
+        <p class="font-semibold text-sm mb-4 tracking-widest uppercase text-caramel">Kontak</p>
+        <ul class="space-y-2 text-cream/50 text-sm">
+          <li>📍 Jl. Rasa Segar No.88, Jaksel</li>
+          <li>📱 +62 812-3456-7890</li>
+          <li>✉️ hello@suridrinks.id</li>
+          <li>🕐 07.00 – 21.00 WIB</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="border-t border-cream/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-cream/30 text-xs">
+      <p>© 2025 SURI DRINKS. All rights reserved.</p>
+      <p>Made with ☕ & ❤️ in Jakarta</p>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ══════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════ -->
+<script>
+/* ── Navbar scroll ── */
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+/* ── Hamburger ── */
+const ham  = document.getElementById('hamburger');
+const menu = document.getElementById('mobile-menu');
+const lines = ham.querySelectorAll('.ham-line');
+let menuOpen = false;
+
+ham.addEventListener('click', () => {
+  menuOpen = !menuOpen;
+  menu.classList.toggle('open', menuOpen);
+  // Animate lines
+  if (menuOpen) {
+    lines[0].style.transform = 'translateY(8px) rotate(45deg)';
+    lines[1].style.opacity   = '0';
+    lines[2].style.transform = 'translateY(-8px) rotate(-45deg)';
+  } else {
+    lines.forEach(l => { l.style.transform = ''; l.style.opacity = ''; });
+  }
+});
+
+// Close on link click
+menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  menuOpen = false; menu.classList.remove('open');
+  lines.forEach(l => { l.style.transform = ''; l.style.opacity = ''; });
+}));
+
+/* ── Scroll reveal ── */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+/* ── Countdown timer (counts to midnight) ── */
+function updateCountdown() {
+  const now  = new Date();
+  const end  = new Date(); end.setHours(23,59,59,999);
+  const diff = end - now;
+  const h = Math.floor(diff / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000)   / 1000);
+  const pad = n => String(n).padStart(2,'0');
+  document.getElementById('cd-h').textContent = pad(h);
+  document.getElementById('cd-m').textContent = pad(m);
+  document.getElementById('cd-s').textContent = pad(s);
+}
+updateCountdown(); setInterval(updateCountdown, 1000);
+
+/* ── Menu filter tabs ── */
+const filterBtns = document.querySelectorAll('.filter-btn');
+const cards      = document.querySelectorAll('[data-category]');
+
+// Style active
+function setFilterStyle(btn) {
+  filterBtns.forEach(b => {
+    b.classList.remove('bg-caramel','text-cream','shadow-md');
+    b.classList.add('bg-espresso/5','text-espresso/60');
+  });
+  btn.classList.add('bg-caramel','text-cream','shadow-md');
+  btn.classList.remove('bg-espresso/5','text-espresso/60');
+}
+
+// Init style
+filterBtns.forEach(btn => btn.classList.add('bg-espresso/5','text-espresso/60'));
+setFilterStyle(filterBtns[0]);
+
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    setFilterStyle(btn);
+    const f = btn.dataset.filter;
+    cards.forEach(card => {
+      const show = f === 'all' || card.dataset.category === f;
+      card.style.transition = 'opacity .3s, transform .3s';
+      card.style.opacity    = show ? '1' : '0.2';
+      card.style.transform  = show ? ''   : 'scale(.95)';
+      card.style.pointerEvents = show ? '' : 'none';
+    });
+  });
+});
+
+/* ── Quick order form → WhatsApp ── */
+document.getElementById('send-order').addEventListener('click', () => {
+  const name  = document.getElementById('form-name').value.trim();
+  const phone = document.getElementById('form-phone').value.trim();
+  const order = document.getElementById('form-order').value.trim();
+  if (!name || !order) { alert('Lengkapi nama dan pesanan kamu ya 😊'); return; }
+  const msg = encodeURIComponent(`Halo SURI DRINKS! 👋\n\nNama: ${name}\nNo. HP: ${phone || '-'}\nPesanan:\n${order}\n\nMohon konfirmasinya. Terima kasih! 🙏`);
+  window.open(`https://wa.me/6281234567890?text=${msg}`, '_blank');
+});
+
+/* ── Smooth scroll for all anchor links ── */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  });
+});
+</script>
+
+</body>
+</html>
